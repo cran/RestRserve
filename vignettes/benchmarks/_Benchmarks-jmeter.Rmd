@@ -1,0 +1,78 @@
+---
+title: "Benchmarks-jmeter"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Benchmarks-jmeter}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>", 
+  results = 'markup', 
+  eval = FALSE
+)
+```
+
+There are many tools which allow to benchmark and stress-test HTTP API. We will use [loadtest](https://github.com/tmobile/loadtest) R package which wraps [Apache JMeter](http://jmeter.apache.org/).
+
+
+We will benchmark a very simple programm - it receives HTTP request at `/hello` and answer with `"world"`. 
+
+RestRserve application which implements it looks like:
+
+```{r}
+library(RestRserve)
+app = Application$new()
+backend = BackendRserve$new()
+app$logger$set_log_level("off")
+app$add_get("/hello", FUN = function(req, res) {
+  res$set_body("world")
+})
+
+backend$start(app = app, http_port = 8081, background = FALSE)
+```
+
+Here we will assume that we have `java` installed and we have Jmeter at `~/apache-jmeter-5.2`.
+
+```{r, include = FALSE}
+library(loadtest)
+Sys.setenv("LOADTEST_JMETER_PATH" = path.expand("~/apache-jmeter-5.2/bin/jmeter"))
+```
+
+Let's benchmark on how long will it to process 1024 requests coming from single thread:
+```{r, include=FALSE}
+res = loadtest(url = "localhost:8081/hello", method = "GET", loops = 1024, threads = 1)
+```
+
+
+```{r}
+plot_elapsed_times(res)
+```
+
+
+And 6 threads
+```{r, include=FALSE}
+res = loadtest(url = "localhost:8081/hello", method = "GET", loops = 1024, threads = 6)
+```
+
+
+```{r}
+plot_elapsed_times(res)
+
+```
+
+```{r}
+plot_requests_by_thread(res)
+```
+
+```{r}
+plot_requests_per_second(res)
+```
+
+Shut down service:
+```{r}
+rr$kill_tree()
+```
