@@ -1,6 +1,6 @@
-c6e8ba7e7754eb6a0c91e4341c5fde8f *DESCRIPTION
+5a0d21c0d0772ed4692ec5013873e263 *DESCRIPTION
 0d3d1c3c2b22e5c46bfc1cd00d7de5bb *NAMESPACE
-2dae09901f079f0a5b9d2d2284535c7e *NEWS.md
+5125686f7e1aa741be704d74028f7218 *NEWS.md
 b4e7cf1aca60a40221baeb11b037b443 *R/Application.R
 f9c4c066147f76834d480ad52a401d86 *R/AuthBackend.R
 878505b55e4d2f0837bf0605e1e93819 *R/AuthBackendBasic.R
@@ -33,13 +33,13 @@ dc5f6b62b559c4e401698995c71ae73d *inst/bench.R
 14b2a106ab8cc970f968cd8863684c08 *inst/doc/Authentication.html
 226b2f0df3bfe74e9a46f1197a00e3dc *inst/doc/ContentHandlers.R
 cace31849947284c91610aae267b44c3 *inst/doc/ContentHandlers.Rmd
-43213e5af67258bc1013f0e0a9dad2b8 *inst/doc/ContentHandlers.html
+f87a0b95c3410751b5b8a35ae6455142 *inst/doc/ContentHandlers.html
 7263e0454aaa199c58d21dc4abc2e9a0 *inst/doc/Logging.R
 1d7bb8768f35ed23507892532647ab48 *inst/doc/Logging.Rmd
-f7a6c2d8d1a771a967727082d00818af *inst/doc/Logging.html
+c21e063ea2299482b30cde7ed4d9b145 *inst/doc/Logging.html
 c45d96d3782630b72c6bda1d976ddfd6 *inst/doc/Middleware.R
 414bb3d914656dd69d55f9477da3936f *inst/doc/Middleware.Rmd
-12fa321c32a693e2e9f22a6035c916d8 *inst/doc/Middleware.html
+be88f512870e20a6dc3f1d50ed386788 *inst/doc/Middleware.html
 0a70cb32351707758e6393c2bb0c71b7 *inst/doc/RestRserve.R
 1f9eb9fe4db6c6e9622117125885bede *inst/doc/RestRserve.Rmd
 0acad43dc712d1443086e60dc0963169 *inst/doc/RestRserve.html
@@ -142,7 +142,7 @@ c00e8b5c1b9363ca72b46aee29a46939 *src/format_cookies.cpp
 0fd90564c185c18088622ba6929f91fa *src/format_headers.cpp
 a70afd4309ca9d67336f2e61d333c0da *src/nonstd/string_view.hpp
 e4bd5fb54732a8b8195333bc8040141e *src/parse_cookies.cpp
-c5901ff38bacb5973ad5e8235c6abfc5 *src/parse_headers.cpp
+a85c3a62c26a91d5777a044e1d1b386c *src/parse_headers.cpp
 c276c7d96da9be8d70364bdbb5353678 *src/parse_multipart.cpp
 c00c172d3ec19591d516b493f161ff92 *src/url_decode.cpp
 6edc649ed34a926c6cfa52c9ff11310a *src/url_encode.cpp
