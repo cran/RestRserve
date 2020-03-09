@@ -1,6 +1,6 @@
-5a0d21c0d0772ed4692ec5013873e263 *DESCRIPTION
+6820762e49c3c6aeb44db0d0c0b176cf *DESCRIPTION
 0d3d1c3c2b22e5c46bfc1cd00d7de5bb *NAMESPACE
-5125686f7e1aa741be704d74028f7218 *NEWS.md
+cfde10710443e8ab226f6d545c75245d *NEWS.md
 b4e7cf1aca60a40221baeb11b037b443 *R/Application.R
 f9c4c066147f76834d480ad52a401d86 *R/AuthBackend.R
 878505b55e4d2f0837bf0605e1e93819 *R/AuthBackendBasic.R
@@ -23,7 +23,7 @@ a6f057479cfe2a3befa063e9f0247ee5 *R/http_status_codes.R
 790fb255876d54081dd5559dd16f409a *R/logging.R
 b3940d532de70e535f21da1060b399b4 *R/openapi.R
 d6708b72356344a134df8d3d9d1e5b03 *R/swagger-ui.R
-6e326f8d0c80f14a4e87ef00df6fb366 *R/utils.R
+bf32eab873ee5e8b7fb73488d6aa92ac *R/utils.R
 5fecc47c3e1d9ce048569161a3351867 *R/zzz.R
 ac21d3ff948b0586551b2528fd913f18 *README.md
 5622f1fd6f09392555a7c493f968c80c *build/vignette.rds
@@ -33,13 +33,13 @@ dc5f6b62b559c4e401698995c71ae73d *inst/bench.R
 14b2a106ab8cc970f968cd8863684c08 *inst/doc/Authentication.html
 226b2f0df3bfe74e9a46f1197a00e3dc *inst/doc/ContentHandlers.R
 cace31849947284c91610aae267b44c3 *inst/doc/ContentHandlers.Rmd
-f87a0b95c3410751b5b8a35ae6455142 *inst/doc/ContentHandlers.html
+c25865e014e446e0264faa03f70d165c *inst/doc/ContentHandlers.html
 7263e0454aaa199c58d21dc4abc2e9a0 *inst/doc/Logging.R
 1d7bb8768f35ed23507892532647ab48 *inst/doc/Logging.Rmd
-c21e063ea2299482b30cde7ed4d9b145 *inst/doc/Logging.html
+002343223f2b454c3a6f8652910349f8 *inst/doc/Logging.html
 c45d96d3782630b72c6bda1d976ddfd6 *inst/doc/Middleware.R
 414bb3d914656dd69d55f9477da3936f *inst/doc/Middleware.Rmd
-be88f512870e20a6dc3f1d50ed386788 *inst/doc/Middleware.html
+f1511bdc2393f18137812943757491d7 *inst/doc/Middleware.html
 0a70cb32351707758e6393c2bb0c71b7 *inst/doc/RestRserve.R
 1f9eb9fe4db6c6e9622117125885bede *inst/doc/RestRserve.Rmd
 0acad43dc712d1443086e60dc0963169 *inst/doc/RestRserve.html
