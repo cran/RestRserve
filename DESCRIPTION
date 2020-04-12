@@ -8,7 +8,7 @@ Description:
   application development. Out of the box allows to serve requests using
   'Rserve' package, but flexible enough to integrate with other HTTP servers
   such as 'httpuv'.
-Version: 0.2.1
+Version: 0.2.2
 Authors@R: c(
   person(given = "Dmitriy",
          family = "Selivanov",
@@ -40,10 +40,10 @@ LazyData: true
 RoxygenNote: 7.1.0
 VignetteBuilder: knitr
 NeedsCompilation: yes
-Packaged: 2020-03-27 17:52:07 UTC; dselivanov
+Packaged: 2020-04-12 05:36:03 UTC; dselivanov
 Author: Dmitriy Selivanov [aut, cre] (<https://orcid.org/0000-0001-5413-1506>),
   Artem Klevtsov [aut] (<https://orcid.org/0000-0003-0492-6647>),
   rexy.ai [cph, fnd]
 Maintainer: Dmitriy Selivanov <ds@rexy.ai>
 Repository: CRAN
-Date/Publication: 2020-03-28 08:20:24 UTC
+Date/Publication: 2020-04-12 06:10:02 UTC
