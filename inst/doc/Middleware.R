@@ -1,11 +1,11 @@
-## ---- include = FALSE---------------------------------------------------------
+## ---- include = FALSE----------------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>", 
   results= 'markup'
 )
 
-## -----------------------------------------------------------------------------
+## ------------------------------------------------------------------------
 library(RestRserve)
 
 app = Application$new(content_type = "application/json")
@@ -21,12 +21,12 @@ app$add_get("/foo", function(request, response) {
 })
 
 
-## -----------------------------------------------------------------------------
+## ------------------------------------------------------------------------
 req = Request$new(path = "/foo", method = "GET", parameters_query = list(key1 = "value1", key2 = "value2"))
 resp = app$process_request(req)
 resp$body
 
-## -----------------------------------------------------------------------------
+## ------------------------------------------------------------------------
 logging_middleware = Middleware$new(
   process_request = function(request, response) {
     msg = list(
@@ -55,15 +55,15 @@ logging_middleware = Middleware$new(
 
 app$append_middleware(logging_middleware)
 
-## -----------------------------------------------------------------------------
+## ------------------------------------------------------------------------
 req = Request$new(path = "/foo", method = "GET", parameters_query = list(key1 = "value1", key2 = "value2"))
 resp = app$process_request(req)
 
-## -----------------------------------------------------------------------------
+## ------------------------------------------------------------------------
 req = Request$new(path = "/foo2", method = "GET", parameters_query = list(key1 = "value1", key2 = "value2"))
 resp = app$process_request(req)
 
-## -----------------------------------------------------------------------------
+## ------------------------------------------------------------------------
 gzip_middleware = Middleware$new(
   process_request = function(request, response) {
     msg = list(
@@ -92,10 +92,10 @@ gzip_middleware = Middleware$new(
 )
 app$append_middleware(gzip_middleware)
 
-## -----------------------------------------------------------------------------
+## ------------------------------------------------------------------------
 req = Request$new(path = "/foo", method = "GET", parameters_query = list(key1 = "value1", key2 = "value2"))
 resp = app$process_request(req)
 
-## -----------------------------------------------------------------------------
+## ------------------------------------------------------------------------
 rawToChar(memDecompress(resp$body, "gzip"))
 

@@ -7,7 +7,6 @@
 <meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
-<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -19,9 +18,9 @@
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css" data-origin="pandoc">
-code.sourceCode > span { display: inline-block; line-height: 1.25; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-code.sourceCode > span:empty { height: 1.2em; }
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 div.sourceCode { margin: 1em 0; }
@@ -31,16 +30,14 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
 }
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
+    border: none; pointer-events: all; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -49,9 +46,9 @@ pre.numberSource code > span > a:first-child::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {   }
+  {  }
 @media screen {
-code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+a.sourceLine::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -97,7 +94,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -327,101 +324,98 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </div>
 <div id="create-application" class="section level2">
 <h2>1. Create application</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(RestRserve)</span>
-<span id="cb1-2"><a href="#cb1-2"></a>app =<span class="st"> </span>Application<span class="op">$</span><span class="kw">new</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(RestRserve)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2">app =<span class="st"> </span>Application<span class="op">$</span><span class="kw">new</span>()</a></code></pre></div>
 </div>
 <div id="define-logic" class="section level2">
 <h2>2. Define logic</h2>
 <p>For simplicity we will use Fibonacci number calculation as an algorithm we want to expose.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>calc_fib =<span class="st"> </span><span class="cf">function</span>(n) {</span>
-<span id="cb2-2"><a href="#cb2-2"></a>  <span class="cf">if</span> (n <span class="op">&lt;</span><span class="st"> </span>0L) <span class="kw">stop</span>(<span class="st">&quot;n should be &gt;= 0&quot;</span>)</span>
-<span id="cb2-3"><a href="#cb2-3"></a>  <span class="cf">if</span> (n <span class="op">==</span><span class="st"> </span>0L) <span class="kw">return</span>(0L)</span>
-<span id="cb2-4"><a href="#cb2-4"></a>  <span class="cf">if</span> (n <span class="op">==</span><span class="st"> </span>1L <span class="op">||</span><span class="st"> </span>n <span class="op">==</span><span class="st"> </span>2L) <span class="kw">return</span>(1L)</span>
-<span id="cb2-5"><a href="#cb2-5"></a>  x =<span class="st"> </span><span class="kw">rep</span>(1L, n)</span>
-<span id="cb2-6"><a href="#cb2-6"></a>  </span>
-<span id="cb2-7"><a href="#cb2-7"></a>  <span class="cf">for</span> (i <span class="cf">in</span> 3L<span class="op">:</span>n) {</span>
-<span id="cb2-8"><a href="#cb2-8"></a>   x[[i]] =<span class="st"> </span>x[[i <span class="op">-</span><span class="st"> </span><span class="dv">1</span>]] <span class="op">+</span><span class="st"> </span>x[[i <span class="op">-</span><span class="st"> </span><span class="dv">2</span>]] </span>
-<span id="cb2-9"><a href="#cb2-9"></a>  }</span>
-<span id="cb2-10"><a href="#cb2-10"></a>  </span>
-<span id="cb2-11"><a href="#cb2-11"></a>  <span class="kw">return</span>(x[[n]])</span>
-<span id="cb2-12"><a href="#cb2-12"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">calc_fib =<span class="st"> </span><span class="cf">function</span>(n) {</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">  <span class="cf">if</span> (n <span class="op">&lt;</span><span class="st"> </span>0L) <span class="kw">stop</span>(<span class="st">&quot;n should be &gt;= 0&quot;</span>)</a>
+<a class="sourceLine" id="cb2-3" data-line-number="3">  <span class="cf">if</span> (n <span class="op">==</span><span class="st"> </span>0L) <span class="kw">return</span>(0L)</a>
+<a class="sourceLine" id="cb2-4" data-line-number="4">  <span class="cf">if</span> (n <span class="op">==</span><span class="st"> </span>1L <span class="op">||</span><span class="st"> </span>n <span class="op">==</span><span class="st"> </span>2L) <span class="kw">return</span>(1L)</a>
+<a class="sourceLine" id="cb2-5" data-line-number="5">  x =<span class="st"> </span><span class="kw">rep</span>(1L, n)</a>
+<a class="sourceLine" id="cb2-6" data-line-number="6">  </a>
+<a class="sourceLine" id="cb2-7" data-line-number="7">  <span class="cf">for</span> (i <span class="cf">in</span> 3L<span class="op">:</span>n) {</a>
+<a class="sourceLine" id="cb2-8" data-line-number="8">   x[[i]] =<span class="st"> </span>x[[i <span class="op">-</span><span class="st"> </span><span class="dv">1</span>]] <span class="op">+</span><span class="st"> </span>x[[i <span class="op">-</span><span class="st"> </span><span class="dv">2</span>]] </a>
+<a class="sourceLine" id="cb2-9" data-line-number="9">  }</a>
+<a class="sourceLine" id="cb2-10" data-line-number="10">  </a>
+<a class="sourceLine" id="cb2-11" data-line-number="11">  <span class="kw">return</span>(x[[n]])</a>
+<a class="sourceLine" id="cb2-12" data-line-number="12">}</a></code></pre></div>
 <p>Create function which will handle requests.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>fib_handler =<span class="st"> </span><span class="cf">function</span>(request, response) {</span>
-<span id="cb3-2"><a href="#cb3-2"></a>  n =<span class="st"> </span><span class="kw">as.integer</span>(request<span class="op">$</span>parameters_query[[<span class="st">&quot;n&quot;</span>]])</span>
-<span id="cb3-3"><a href="#cb3-3"></a>  <span class="cf">if</span> (<span class="kw">length</span>(n) <span class="op">==</span><span class="st"> </span>0L <span class="op">||</span><span class="st"> </span><span class="kw">is.na</span>(n)) {</span>
-<span id="cb3-4"><a href="#cb3-4"></a>    <span class="kw">raise</span>(HTTPError<span class="op">$</span><span class="kw">bad_request</span>())</span>
-<span id="cb3-5"><a href="#cb3-5"></a>  }</span>
-<span id="cb3-6"><a href="#cb3-6"></a>  response<span class="op">$</span><span class="kw">set_body</span>(<span class="kw">as.character</span>(<span class="kw">calc_fib</span>(n)))</span>
-<span id="cb3-7"><a href="#cb3-7"></a>  response<span class="op">$</span><span class="kw">set_content_type</span>(<span class="st">&quot;text/plain&quot;</span>)</span>
-<span id="cb3-8"><a href="#cb3-8"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">fib_handler =<span class="st"> </span><span class="cf">function</span>(request, response) {</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">  n =<span class="st"> </span><span class="kw">as.integer</span>(request<span class="op">$</span>parameters_query[[<span class="st">&quot;n&quot;</span>]])</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">  <span class="cf">if</span> (<span class="kw">length</span>(n) <span class="op">==</span><span class="st"> </span>0L <span class="op">||</span><span class="st"> </span><span class="kw">is.na</span>(n)) {</a>
+<a class="sourceLine" id="cb3-4" data-line-number="4">    <span class="kw">raise</span>(HTTPError<span class="op">$</span><span class="kw">bad_request</span>())</a>
+<a class="sourceLine" id="cb3-5" data-line-number="5">  }</a>
+<a class="sourceLine" id="cb3-6" data-line-number="6">  response<span class="op">$</span><span class="kw">set_body</span>(<span class="kw">as.character</span>(<span class="kw">calc_fib</span>(n)))</a>
+<a class="sourceLine" id="cb3-7" data-line-number="7">  response<span class="op">$</span><span class="kw">set_content_type</span>(<span class="st">&quot;text/plain&quot;</span>)</a>
+<a class="sourceLine" id="cb3-8" data-line-number="8">}</a></code></pre></div>
 </div>
 <div id="register-endpoint" class="section level2">
 <h2>2. Register endpoint</h2>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>app<span class="op">$</span><span class="kw">add_get</span>(<span class="dt">path =</span> <span class="st">&quot;/fib&quot;</span>, <span class="dt">FUN =</span> fib_handler)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">app<span class="op">$</span><span class="kw">add_get</span>(<span class="dt">path =</span> <span class="st">&quot;/fib&quot;</span>, <span class="dt">FUN =</span> fib_handler)</a></code></pre></div>
 </div>
 <div id="test-endpoints" class="section level2">
 <h2>3. Test endpoints</h2>
 <p>Now we can test our application without starting it:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>request =<span class="st"> </span>Request<span class="op">$</span><span class="kw">new</span>(<span class="dt">path =</span> <span class="st">&quot;/fib&quot;</span>, <span class="dt">parameters_query =</span> <span class="kw">list</span>(<span class="dt">n =</span> <span class="dv">10</span>))</span>
-<span id="cb5-2"><a href="#cb5-2"></a>response =<span class="st"> </span>app<span class="op">$</span><span class="kw">process_request</span>(request)</span>
-<span id="cb5-3"><a href="#cb5-3"></a></span>
-<span id="cb5-4"><a href="#cb5-4"></a><span class="kw">cat</span>(<span class="st">&quot;Response status:&quot;</span>, response<span class="op">$</span>status)</span>
-<span id="cb5-5"><a href="#cb5-5"></a><span class="co">#&gt; Response status: 200 OK</span></span>
-<span id="cb5-6"><a href="#cb5-6"></a><span class="kw">cat</span>(<span class="st">&quot;Response body:&quot;</span>, response<span class="op">$</span>body)</span>
-<span id="cb5-7"><a href="#cb5-7"></a><span class="co">#&gt; Response body: 55</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">request =<span class="st"> </span>Request<span class="op">$</span><span class="kw">new</span>(<span class="dt">path =</span> <span class="st">&quot;/fib&quot;</span>, <span class="dt">parameters_query =</span> <span class="kw">list</span>(<span class="dt">n =</span> <span class="dv">10</span>))</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">response =<span class="st"> </span>app<span class="op">$</span><span class="kw">process_request</span>(request)</a>
+<a class="sourceLine" id="cb5-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="kw">cat</span>(<span class="st">&quot;Response status:&quot;</span>, response<span class="op">$</span>status)</a>
+<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="co">#&gt; Response status: 200 OK</span></a>
+<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="kw">cat</span>(<span class="st">&quot;Response body:&quot;</span>, response<span class="op">$</span>body)</a>
+<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="co">#&gt; Response body: 55</span></a></code></pre></div>
 <p>It is generally a good idea to write unit tests against application. One can use a common framework such as <a href="https://cran.r-project.org/package=tinytest">tinytest</a>.</p>
 </div>
 <div id="add-openapi-description-and-swagger-ui" class="section level2">
 <h2>4. Add OpenAPI description and Swagger UI</h2>
 <p>Generally it is a good idea to provide documentation along with the API. Convenient way to do that is to supply a <a href="https://swagger.io/docs/specification/about/">openapi specification</a>. This as simple as adding a yaml file as an additional endpoint:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">openapi</span><span class="kw">:</span><span class="at"> </span><span class="fl">3.0.1</span></span>
-<span id="cb6-2"><a href="#cb6-2"></a><span class="fu">info</span><span class="kw">:</span></span>
-<span id="cb6-3"><a href="#cb6-3"></a><span class="at">  </span><span class="fu">title</span><span class="kw">:</span><span class="at"> RestRserve OpenAPI</span></span>
-<span id="cb6-4"><a href="#cb6-4"></a><span class="at">  </span><span class="fu">version</span><span class="kw">:</span><span class="at"> </span><span class="st">&#39;1.0&#39;</span></span>
-<span id="cb6-5"><a href="#cb6-5"></a><span class="fu">servers</span><span class="kw">:</span></span>
-<span id="cb6-6"><a href="#cb6-6"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">url</span><span class="kw">:</span><span class="at"> /</span></span>
-<span id="cb6-7"><a href="#cb6-7"></a><span class="fu">paths</span><span class="kw">:</span></span>
-<span id="cb6-8"><a href="#cb6-8"></a><span class="at">  </span><span class="fu">/fib</span><span class="kw">:</span></span>
-<span id="cb6-9"><a href="#cb6-9"></a><span class="at">    </span><span class="fu">get</span><span class="kw">:</span></span>
-<span id="cb6-10"><a href="#cb6-10"></a><span class="at">      </span><span class="fu">description</span><span class="kw">:</span><span class="at"> Calculates Fibonacci number</span></span>
-<span id="cb6-11"><a href="#cb6-11"></a><span class="at">      </span><span class="fu">parameters</span><span class="kw">:</span></span>
-<span id="cb6-12"><a href="#cb6-12"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;n&quot;</span></span>
-<span id="cb6-13"><a href="#cb6-13"></a><span class="at">          </span><span class="fu">description</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;x for Fibonnacci number&quot;</span></span>
-<span id="cb6-14"><a href="#cb6-14"></a><span class="at">          </span><span class="fu">in</span><span class="kw">:</span><span class="at"> query</span></span>
-<span id="cb6-15"><a href="#cb6-15"></a><span class="at">          </span><span class="fu">schema</span><span class="kw">:</span></span>
-<span id="cb6-16"><a href="#cb6-16"></a><span class="at">            </span><span class="fu">type</span><span class="kw">:</span><span class="at"> integer</span></span>
-<span id="cb6-17"><a href="#cb6-17"></a><span class="at">          </span><span class="fu">example</span><span class="kw">:</span><span class="at"> </span><span class="dv">10</span></span>
-<span id="cb6-18"><a href="#cb6-18"></a><span class="at">          </span><span class="fu">required</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
-<span id="cb6-19"><a href="#cb6-19"></a><span class="at">      </span><span class="fu">responses</span><span class="kw">:</span></span>
-<span id="cb6-20"><a href="#cb6-20"></a><span class="at">        </span><span class="fu">200</span><span class="kw">:</span></span>
-<span id="cb6-21"><a href="#cb6-21"></a><span class="at">          </span><span class="fu">description</span><span class="kw">:</span><span class="at"> API response</span></span>
-<span id="cb6-22"><a href="#cb6-22"></a><span class="at">          </span><span class="fu">content</span><span class="kw">:</span></span>
-<span id="cb6-23"><a href="#cb6-23"></a><span class="at">            </span><span class="fu">text/plain</span><span class="kw">:</span></span>
-<span id="cb6-24"><a href="#cb6-24"></a><span class="at">              </span><span class="fu">schema</span><span class="kw">:</span></span>
-<span id="cb6-25"><a href="#cb6-25"></a><span class="at">                </span><span class="fu">type</span><span class="kw">:</span><span class="at"> string</span></span>
-<span id="cb6-26"><a href="#cb6-26"></a><span class="at">                </span><span class="fu">example</span><span class="kw">:</span><span class="at"> </span><span class="dv">5</span></span>
-<span id="cb6-27"><a href="#cb6-27"></a><span class="at">        </span><span class="fu">400</span><span class="kw">:</span></span>
-<span id="cb6-28"><a href="#cb6-28"></a><span class="at">          </span><span class="fu">description</span><span class="kw">:</span><span class="at"> Bad Request</span></span></code></pre></div>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>yaml_file =<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;examples&quot;</span>, <span class="st">&quot;openapi&quot;</span>, <span class="st">&quot;openapi.yaml&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;RestRserve&quot;</span>)</span>
-<span id="cb7-2"><a href="#cb7-2"></a>app<span class="op">$</span><span class="kw">add_openapi</span>(<span class="dt">path =</span> <span class="st">&quot;/openapi.yaml&quot;</span>, <span class="dt">file_path =</span> yaml_file)</span>
-<span id="cb7-3"><a href="#cb7-3"></a>app<span class="op">$</span><span class="kw">add_swagger_ui</span>(<span class="dt">path =</span> <span class="st">&quot;/doc&quot;</span>, <span class="dt">path_openapi =</span> <span class="st">&quot;/openapi.yaml&quot;</span>, <span class="dt">use_cdn =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode yaml"><code class="sourceCode yaml"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="fu">openapi:</span><span class="at"> 3.0.1</span></a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="fu">info:</span></a>
+<a class="sourceLine" id="cb6-3" data-line-number="3">  <span class="fu">title:</span><span class="at"> RestRserve OpenAPI</span></a>
+<a class="sourceLine" id="cb6-4" data-line-number="4">  <span class="fu">version:</span><span class="at"> </span><span class="st">'1.0'</span></a>
+<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="fu">servers:</span></a>
+<a class="sourceLine" id="cb6-6" data-line-number="6">  <span class="kw">-</span> <span class="fu">url:</span><span class="at"> /</span></a>
+<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="fu">paths:</span></a>
+<a class="sourceLine" id="cb6-8" data-line-number="8">  <span class="fu">/fib:</span></a>
+<a class="sourceLine" id="cb6-9" data-line-number="9">    <span class="fu">get:</span></a>
+<a class="sourceLine" id="cb6-10" data-line-number="10">      <span class="fu">description:</span><span class="at"> Calculates Fibonacci number</span></a>
+<a class="sourceLine" id="cb6-11" data-line-number="11">      <span class="fu">parameters:</span></a>
+<a class="sourceLine" id="cb6-12" data-line-number="12">        <span class="kw">-</span> <span class="fu">name:</span><span class="at"> </span><span class="st">&quot;n&quot;</span></a>
+<a class="sourceLine" id="cb6-13" data-line-number="13">          <span class="fu">description:</span><span class="at"> </span><span class="st">&quot;x for Fibonnacci number&quot;</span></a>
+<a class="sourceLine" id="cb6-14" data-line-number="14">          <span class="fu">in:</span><span class="at"> query</span></a>
+<a class="sourceLine" id="cb6-15" data-line-number="15">          <span class="fu">schema:</span></a>
+<a class="sourceLine" id="cb6-16" data-line-number="16">            <span class="fu">type:</span><span class="at"> integer</span></a>
+<a class="sourceLine" id="cb6-17" data-line-number="17">          <span class="fu">example:</span><span class="at"> 10</span></a>
+<a class="sourceLine" id="cb6-18" data-line-number="18">          <span class="fu">required:</span><span class="at"> true</span></a>
+<a class="sourceLine" id="cb6-19" data-line-number="19">      <span class="fu">responses:</span></a>
+<a class="sourceLine" id="cb6-20" data-line-number="20">        <span class="fu">200:</span></a>
+<a class="sourceLine" id="cb6-21" data-line-number="21">          <span class="fu">description:</span><span class="at"> API response</span></a>
+<a class="sourceLine" id="cb6-22" data-line-number="22">          <span class="fu">content:</span></a>
+<a class="sourceLine" id="cb6-23" data-line-number="23">            <span class="fu">text/plain:</span></a>
+<a class="sourceLine" id="cb6-24" data-line-number="24">              <span class="fu">schema:</span></a>
+<a class="sourceLine" id="cb6-25" data-line-number="25">                <span class="fu">type:</span><span class="at"> string</span></a>
+<a class="sourceLine" id="cb6-26" data-line-number="26">                <span class="fu">example:</span><span class="at"> 5</span></a>
+<a class="sourceLine" id="cb6-27" data-line-number="27">        <span class="fu">400:</span></a>
+<a class="sourceLine" id="cb6-28" data-line-number="28">          <span class="fu">description:</span><span class="at"> Bad Request</span></a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">yaml_file =<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;examples&quot;</span>, <span class="st">&quot;openapi&quot;</span>, <span class="st">&quot;openapi.yaml&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;RestRserve&quot;</span>)</a>
+<a class="sourceLine" id="cb7-2" data-line-number="2">app<span class="op">$</span><span class="kw">add_openapi</span>(<span class="dt">path =</span> <span class="st">&quot;/openapi.yaml&quot;</span>, <span class="dt">file_path =</span> yaml_file)</a>
+<a class="sourceLine" id="cb7-3" data-line-number="3">app<span class="op">$</span><span class="kw">add_swagger_ui</span>(<span class="dt">path =</span> <span class="st">&quot;/doc&quot;</span>, <span class="dt">path_openapi =</span> <span class="st">&quot;/openapi.yaml&quot;</span>, <span class="dt">use_cdn =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 </div>
 <div id="start-the-app" class="section level2">
 <h2>5. Start the app</h2>
 <p>Now all is ready and we can start application with Rserve backend. It will block R session and start listening for incoming requests.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>backend =<span class="st"> </span>BackendRserve<span class="op">$</span><span class="kw">new</span>()</span>
-<span id="cb8-2"><a href="#cb8-2"></a>backend<span class="op">$</span><span class="kw">start</span>(app, <span class="dt">http_port =</span> <span class="dv">8080</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">backend =<span class="st"> </span>BackendRserve<span class="op">$</span><span class="kw">new</span>()</a>
+<a class="sourceLine" id="cb8-2" data-line-number="2">backend<span class="op">$</span><span class="kw">start</span>(app, <span class="dt">http_port =</span> <span class="dv">8080</span>)</a></code></pre></div>
 </div>
 <div id="check-it-works" class="section level2">
 <h2>6. Check it works</h2>
 <p>Check app can calculate fibonacci numbers:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1"></a><span class="ex">curl</span> localhost:8080/fib?n=10</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="ex">curl</span> localhost:8080/fib?n=10</a></code></pre></div>
 <p>Check out a swagger UI in the browser: <code>http://localhost:8080/doc</code></p>
 </div>
 
-
-
-<!-- code folding -->
 
 
 <!-- dynamically load mathjax for compatibility with self-contained -->

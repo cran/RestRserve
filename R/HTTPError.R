@@ -232,7 +232,7 @@ HTTPErrorFactory = R6::R6Class(
     #' @param ... Additional named arguments which will be passed to `Response$new()`.
     #' @return [Response] object.
     unprocessable_entity = function(...) {
-      private$prepare_response(417L, ...)
+      private$prepare_response(422L, ...)
     },
     #' @description
     #' Generates corresponding http error.
