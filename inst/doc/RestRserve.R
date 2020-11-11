@@ -1,10 +1,10 @@
-## ---- include = FALSE----------------------------------------------------
+## ---- include = FALSE---------------------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
 
-## ---- include = FALSE----------------------------------------------------
+## ---- include = FALSE---------------------------------------------------------
 run_bg = function(expr) {
   args = c("--vanilla", "-q")
   expr_c = deparse(substitute(expr))
@@ -13,11 +13,11 @@ run_bg = function(expr) {
   return(pid)
 }
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 library(RestRserve)
 app = Application$new()
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 calc_fib = function(n) {
   if (n < 0L) stop("n should be >= 0")
   if (n == 0L) return(0L)
@@ -31,36 +31,36 @@ calc_fib = function(n) {
   return(x[[n]])
 }
 
-## ------------------------------------------------------------------------
-fib_handler = function(request, response) {
-  n = as.integer(request$parameters_query[["n"]])
+## ---- req_res-----------------------------------------------------------------
+fib_handler = function(.req, .res) {
+  n = as.integer(.req$parameters_query[["n"]])
   if (length(n) == 0L || is.na(n)) {
     raise(HTTPError$bad_request())
   }
-  response$set_body(as.character(calc_fib(n)))
-  response$set_content_type("text/plain")
+  .res$set_body(as.character(calc_fib(n)))
+  .res$set_content_type("text/plain")
 }
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 app$add_get(path = "/fib", FUN = fib_handler)
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 request = Request$new(path = "/fib", parameters_query = list(n = 10))
 response = app$process_request(request)
 
 cat("Response status:", response$status)
 cat("Response body:", response$body)
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 yaml_file = system.file("examples", "openapi", "openapi.yaml", package = "RestRserve")
 app$add_openapi(path = "/openapi.yaml", file_path = yaml_file)
 app$add_swagger_ui(path = "/doc", path_openapi = "/openapi.yaml", use_cdn = TRUE)
 
-## ----eval = FALSE--------------------------------------------------------
+## ----eval = FALSE-------------------------------------------------------------
 #  backend = BackendRserve$new()
 #  backend$start(app, http_port = 8080)
 
-## ----echo = FALSE, eval = FALSE------------------------------------------
+## ----echo = FALSE, eval = FALSE-----------------------------------------------
 #  pid = run_bg({
 #    library(RestRserve)
 #    calc_fib = function(n) {
@@ -72,13 +72,13 @@ app$add_swagger_ui(path = "/doc", path_openapi = "/openapi.yaml", use_cdn = TRUE
 #      x[[n]]
 #    }
 #  
-#    fib_handler = function(request, response) {
-#      n = as.integer(request$parameters_query[["n"]])
+#    fib_handler = function(.req, .res) {
+#      n = as.integer(.req$parameters_query[["n"]])
 #      if (length(n) == 0L || is.na(n)) {
 #        raise(HTTPError$bad_request())
 #      }
-#      response$set_body(as.character(calc_fib(n)))
-#      response$set_content_type("text/plain")
+#      .res$set_body(as.character(calc_fib(n)))
+#      .res$set_content_type("text/plain")
 #    }
 #  
 #    app = RestRserve::Application$new()

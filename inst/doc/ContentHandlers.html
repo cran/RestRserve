@@ -1,43 +1,105 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
 
 <title>Body encoding and decoding</title>
 
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+<style type="text/css">
+a.anchor-section {margin-left: 10px; visibility: hidden; color: inherit;}
+a.anchor-section::before {content: '#';}
+.hasAnchor:hover a.anchor-section {visibility: visible;}
+</style>
+<script>// Anchor sections v1.0 written by Atsushi Yasumoto on Oct 3rd, 2020.
+document.addEventListener('DOMContentLoaded', function() {
+  // Do nothing if AnchorJS is used
+  if (typeof window.anchors === 'object' && anchors.hasOwnProperty('hasAnchorJSLink')) {
+    return;
+  }
+
+  const h = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+
+  // Do nothing if sections are already anchored
+  if (Array.from(h).some(x => x.classList.contains('hasAnchor'))) {
+    return null;
+  }
+
+  // Use section id when pandoc runs with --section-divs
+  const section_id = function(x) {
+    return ((x.classList.contains('section') || (x.tagName === 'SECTION'))
+            ? x.id : '');
+  };
+
+  // Add anchors
+  h.forEach(function(x) {
+    const id = x.id || section_id(x.parentElement);
+    if (id === '') {
+      return null;
+    }
+    let anchor = document.createElement('a');
+    anchor.href = '#' + id;
+    anchor.classList = ['anchor-section'];
+    x.classList.add('hasAnchor');
+    x.appendChild(anchor);
+  });
+});
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
 
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css" data-origin="pandoc">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -46,9 +108,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -94,7 +156,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -115,9 +177,6 @@ padding-right: 2em;
 font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 font-size: 14px;
 line-height: 1.35;
-}
-#header {
-text-align: center;
 }
 #TOC {
 clear: both;
@@ -286,7 +345,8 @@ code > span.st { color: #d14; }
 code > span.co { color: #888888; font-style: italic; } 
 code > span.ot { color: #007020; } 
 code > span.al { color: #ff0000; font-weight: bold; } 
-code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
 </style>
 
 
@@ -306,35 +366,35 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <div id="encoding" class="section level1">
 <h1>Encoding</h1>
 <p>Let’s consider an example. We develop an application which calculates <code>factorial</code> of a number:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(RestRserve)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2">backend =<span class="st"> </span>BackendRserve<span class="op">$</span><span class="kw">new</span>()</a>
-<a class="sourceLine" id="cb1-3" data-line-number="3">application =<span class="st"> </span>Application<span class="op">$</span><span class="kw">new</span>()</a>
-<a class="sourceLine" id="cb1-4" data-line-number="4">application<span class="op">$</span><span class="kw">add_get</span>(<span class="dt">path =</span> <span class="st">&quot;/factorial&quot;</span>, <span class="cf">function</span>(req, res) {</a>
-<a class="sourceLine" id="cb1-5" data-line-number="5">  x =<span class="st"> </span>req<span class="op">$</span><span class="kw">get_param_query</span>(<span class="st">&quot;x&quot;</span>)</a>
-<a class="sourceLine" id="cb1-6" data-line-number="6">  x =<span class="st"> </span><span class="kw">as.integer</span>(x)</a>
-<a class="sourceLine" id="cb1-7" data-line-number="7">  res<span class="op">$</span><span class="kw">set_body</span>(<span class="kw">factorial</span>(x))</a>
-<a class="sourceLine" id="cb1-8" data-line-number="8">})</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RestRserve)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>backend <span class="ot">=</span> BackendRserve<span class="sc">$</span><span class="fu">new</span>()</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>application <span class="ot">=</span> Application<span class="sc">$</span><span class="fu">new</span>()</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>application<span class="sc">$</span><span class="fu">add_get</span>(<span class="at">path =</span> <span class="st">&quot;/factorial&quot;</span>, <span class="cf">function</span>(.req, .res) {</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">=</span> .req<span class="sc">$</span><span class="fu">get_param_query</span>(<span class="st">&quot;x&quot;</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">=</span> <span class="fu">as.integer</span>(x)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  .res<span class="sc">$</span><span class="fu">set_body</span>(<span class="fu">factorial</span>(x))</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div>
 <p>Here is how request will be processed:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">request =<span class="st"> </span>Request<span class="op">$</span><span class="kw">new</span>(</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2">  <span class="dt">path =</span> <span class="st">&quot;/factorial&quot;</span>, </a>
-<a class="sourceLine" id="cb2-3" data-line-number="3">  <span class="dt">method =</span> <span class="st">&quot;GET&quot;</span>, </a>
-<a class="sourceLine" id="cb2-4" data-line-number="4">  <span class="dt">parameters_query =</span> <span class="kw">list</span>(<span class="dt">x =</span> <span class="dv">10</span>)</a>
-<a class="sourceLine" id="cb2-5" data-line-number="5">)</a>
-<a class="sourceLine" id="cb2-6" data-line-number="6">response =<span class="st"> </span>application<span class="op">$</span><span class="kw">process_request</span>(request)</a>
-<a class="sourceLine" id="cb2-7" data-line-number="7">response</a>
-<a class="sourceLine" id="cb2-8" data-line-number="8"><span class="co">#&gt; &lt;RestRserve Response&gt;</span></a>
-<a class="sourceLine" id="cb2-9" data-line-number="9"><span class="co">#&gt;   status code: 200 OK</span></a>
-<a class="sourceLine" id="cb2-10" data-line-number="10"><span class="co">#&gt;   content-type: text/plain</span></a>
-<a class="sourceLine" id="cb2-11" data-line-number="11"><span class="co">#&gt;   &lt;Headers&gt;</span></a>
-<a class="sourceLine" id="cb2-12" data-line-number="12"><span class="co">#&gt;     Server: RestRserve/0.3.0</span></a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>request <span class="ot">=</span> Request<span class="sc">$</span><span class="fu">new</span>(</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">path =</span> <span class="st">&quot;/factorial&quot;</span>, </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">&quot;GET&quot;</span>, </span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">parameters_query =</span> <span class="fu">list</span>(<span class="at">x =</span> <span class="dv">10</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>response <span class="ot">=</span> application<span class="sc">$</span><span class="fu">process_request</span>(request)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>response</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;RestRserve Response&gt;</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   status code: 200 OK</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   content-type: text/plain</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;Headers&gt;</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     Server: RestRserve/0.4.0</span></span></code></pre></div>
 <p>Let’s take a closer look to the <code>response</code> object and its <code>body</code> property:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">str</span>(response<span class="op">$</span>body)</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="co">#&gt;  chr &quot;3628800&quot;</span></a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(response<span class="sc">$</span>body)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  chr &quot;3628800&quot;</span></span></code></pre></div>
 <p>As we can see it is a numeric value. HTTP response body however can’t be an arbitrary R object. It should be something that external systems can understand - either <code>character</code> vector or <code>raw</code> vector. Fortunately <code>application</code> helps to avoid writing boilerplate code to encode the body. Based on the <code>content_type</code> property it can find <code>encode</code> function which will be used to transform <code>body</code> into a http body.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">response<span class="op">$</span>content_type</a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="co">#&gt; [1] &quot;text/plain&quot;</span></a></code></pre></div>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">response<span class="op">$</span>encode</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="co">#&gt; NULL</span></a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>response<span class="sc">$</span>content_type</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;text/plain&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>response<span class="sc">$</span>encode</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; NULL</span></span></code></pre></div>
 <p>Two immediate questions can arise:</p>
 <ol style="list-style-type: decimal">
 <li>Why <code>content_type</code> is equal to <code>text/plain</code>?
@@ -343,92 +403,163 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </ul></li>
 <li>How does application know how to encode <code>text/plain</code>? Can it encode any arbitrary content type?
 <ul>
-<li>Application by default is initialized with pre-defined [EncodeDecodeMiddleware] middleware. The logic on how to encode and decode request and response body is controlled by its <code>ContentHandlers</code> property. Out of the box it supports two content types - <code>text/plain</code> and <code>application/json</code>.</li>
+<li>Application by default is initialized with pre-defined ?EncodeDecodeMiddleware middleware. The logic on how to encode and decode request and response body is controlled by its <code>ContentHandlers</code> property. Out of the box it supports two content types - <code>text/plain</code> and <code>application/json</code>.</li>
 </ul></li>
 </ol>
 <p>For instance <code>app1</code> and <code>app2</code> are equal:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">encode_decode_middleware =<span class="st"> </span>EncodeDecodeMiddleware<span class="op">$</span><span class="kw">new</span>()</a>
-<a class="sourceLine" id="cb6-2" data-line-number="2">app1  =<span class="st"> </span>Application<span class="op">$</span><span class="kw">new</span>(<span class="dt">middleware =</span> <span class="kw">list</span>())</a>
-<a class="sourceLine" id="cb6-3" data-line-number="3">app1<span class="op">$</span><span class="kw">append_middleware</span>(encode_decode_middleware)</a>
-<a class="sourceLine" id="cb6-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb6-5" data-line-number="5">app2 =<span class="st"> </span>Application<span class="op">$</span><span class="kw">new</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>encode_decode_middleware <span class="ot">=</span> EncodeDecodeMiddleware<span class="sc">$</span><span class="fu">new</span>()</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>app1  <span class="ot">=</span> Application<span class="sc">$</span><span class="fu">new</span>(<span class="at">middleware =</span> <span class="fu">list</span>())</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>app1<span class="sc">$</span><span class="fu">append_middleware</span>(encode_decode_middleware)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>app2 <span class="ot">=</span> Application<span class="sc">$</span><span class="fu">new</span>()</span></code></pre></div>
 <p>Here is example on how you can get the actual function used for <code>application/json</code> encoding:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"></a>
-<a class="sourceLine" id="cb7-2" data-line-number="2">FUN =<span class="st"> </span>encode_decode_middleware<span class="op">$</span>ContentHandlers<span class="op">$</span><span class="kw">get_encode</span>(<span class="st">'application/json'</span>)</a>
-<a class="sourceLine" id="cb7-3" data-line-number="3">FUN</a>
-<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="co">#&gt; function(x, unbox = TRUE)  {</span></a>
-<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="co">#&gt;   res = jsonlite::toJSON(x, dataframe = 'columns', auto_unbox = unbox, null = 'null', na = 'null')</span></a>
-<a class="sourceLine" id="cb7-6" data-line-number="6"><span class="co">#&gt;   unclass(res)</span></a>
-<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="co">#&gt; }</span></a>
-<a class="sourceLine" id="cb7-8" data-line-number="8"><span class="co">#&gt; &lt;bytecode: 0x468bc00&gt;</span></a>
-<a class="sourceLine" id="cb7-9" data-line-number="9"><span class="co">#&gt; &lt;environment: namespace:RestRserve&gt;</span></a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>FUN <span class="ot">=</span> encode_decode_middleware<span class="sc">$</span>ContentHandlers<span class="sc">$</span><span class="fu">get_encode</span>(<span class="st">&#39;application/json&#39;</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>FUN</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; function(x, unbox = TRUE)  {</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   res = jsonlite::toJSON(x, dataframe = &#39;columns&#39;, auto_unbox = unbox, null = &#39;null&#39;, na = &#39;null&#39;)</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   unclass(res)</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; }</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;bytecode: 0x7fdb7f31db98&gt;</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;environment: namespace:RestRserve&gt;</span></span></code></pre></div>
 <p>We can manually override application default content-type:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">application<span class="op">$</span><span class="kw">add_get</span>(<span class="dt">path =</span> <span class="st">&quot;/factorial-json&quot;</span>, <span class="cf">function</span>(req, res) {</a>
-<a class="sourceLine" id="cb8-2" data-line-number="2">  x =<span class="st"> </span><span class="kw">as.integer</span>(req<span class="op">$</span><span class="kw">get_param_query</span>(<span class="st">&quot;x&quot;</span>))</a>
-<a class="sourceLine" id="cb8-3" data-line-number="3">  result =<span class="st"> </span><span class="kw">factorial</span>(x)</a>
-<a class="sourceLine" id="cb8-4" data-line-number="4">  res<span class="op">$</span><span class="kw">set_body</span>(<span class="kw">list</span>(<span class="dt">result =</span> result))</a>
-<a class="sourceLine" id="cb8-5" data-line-number="5">  res<span class="op">$</span><span class="kw">set_content_type</span>(<span class="st">&quot;application/json&quot;</span>)</a>
-<a class="sourceLine" id="cb8-6" data-line-number="6">})</a></code></pre></div>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">request =<span class="st"> </span>Request<span class="op">$</span><span class="kw">new</span>(</a>
-<a class="sourceLine" id="cb9-2" data-line-number="2">  <span class="dt">path =</span> <span class="st">&quot;/factorial-json&quot;</span>, </a>
-<a class="sourceLine" id="cb9-3" data-line-number="3">  <span class="dt">method =</span> <span class="st">&quot;GET&quot;</span>, </a>
-<a class="sourceLine" id="cb9-4" data-line-number="4">  <span class="dt">parameters_query =</span> <span class="kw">list</span>(<span class="dt">x =</span> <span class="dv">10</span>)</a>
-<a class="sourceLine" id="cb9-5" data-line-number="5">)</a>
-<a class="sourceLine" id="cb9-6" data-line-number="6">response =<span class="st"> </span>application<span class="op">$</span><span class="kw">process_request</span>(request)</a></code></pre></div>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">response<span class="op">$</span>body</a>
-<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="co">#&gt; [1] &quot;{\&quot;result\&quot;:3628800}&quot;</span></a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>application<span class="sc">$</span><span class="fu">add_get</span>(<span class="at">path =</span> <span class="st">&quot;/factorial-json&quot;</span>, <span class="cf">function</span>(.req, .res) {</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">=</span> <span class="fu">as.integer</span>(.req<span class="sc">$</span><span class="fu">get_param_query</span>(<span class="st">&quot;x&quot;</span>))</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">=</span> <span class="fu">factorial</span>(x)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  .res<span class="sc">$</span><span class="fu">set_body</span>(<span class="fu">list</span>(<span class="at">result =</span> result))</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  .res<span class="sc">$</span><span class="fu">set_content_type</span>(<span class="st">&quot;application/json&quot;</span>)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>request <span class="ot">=</span> Request<span class="sc">$</span><span class="fu">new</span>(</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">path =</span> <span class="st">&quot;/factorial-json&quot;</span>, </span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">&quot;GET&quot;</span>, </span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">parameters_query =</span> <span class="fu">list</span>(<span class="at">x =</span> <span class="dv">10</span>)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>response <span class="ot">=</span> application<span class="sc">$</span><span class="fu">process_request</span>(request)</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>response<span class="sc">$</span>body</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;{\&quot;result\&quot;:3628800}&quot;</span></span></code></pre></div>
 <p>And here is a little bit more complex example where we store a binary object in the body. We will use R’s native serialization, but one can use <code>protobuf</code>, <code>messagepack</code>, etc.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">application<span class="op">$</span><span class="kw">add_get</span>(<span class="dt">path =</span> <span class="st">&quot;/factorial-rds&quot;</span>, <span class="cf">function</span>(req, res) {</a>
-<a class="sourceLine" id="cb11-2" data-line-number="2">  x =<span class="st"> </span><span class="kw">as.integer</span>(req<span class="op">$</span><span class="kw">get_param_query</span>(<span class="st">&quot;x&quot;</span>))</a>
-<a class="sourceLine" id="cb11-3" data-line-number="3">  result =<span class="st"> </span><span class="kw">factorial</span>(x)</a>
-<a class="sourceLine" id="cb11-4" data-line-number="4">  body_rds =<span class="st"> </span><span class="kw">serialize</span>(<span class="kw">list</span>(<span class="dt">result =</span> result), <span class="dt">connection =</span> <span class="ot">NULL</span>)</a>
-<a class="sourceLine" id="cb11-5" data-line-number="5">  res<span class="op">$</span><span class="kw">set_body</span>(body_rds)</a>
-<a class="sourceLine" id="cb11-6" data-line-number="6">  res<span class="op">$</span><span class="kw">set_content_type</span>(<span class="st">&quot;application/x-rds&quot;</span>)</a>
-<a class="sourceLine" id="cb11-7" data-line-number="7">})</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>application<span class="sc">$</span><span class="fu">add_get</span>(<span class="at">path =</span> <span class="st">&quot;/factorial-rds&quot;</span>, <span class="cf">function</span>(.req, .res) {</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">=</span> <span class="fu">as.integer</span>(.req<span class="sc">$</span><span class="fu">get_param_query</span>(<span class="st">&quot;x&quot;</span>))</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">=</span> <span class="fu">factorial</span>(x)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  body_rds <span class="ot">=</span> <span class="fu">serialize</span>(<span class="fu">list</span>(<span class="at">result =</span> result), <span class="at">connection =</span> <span class="cn">NULL</span>)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  .res<span class="sc">$</span><span class="fu">set_body</span>(body_rds)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  .res<span class="sc">$</span><span class="fu">set_content_type</span>(<span class="st">&quot;application/x-rds&quot;</span>)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div>
 <p>However function above won’t work correctly. Out of the box <code>ContentHndlers</code> doesn’t know anything about <code>application/x-rds</code>:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">request =<span class="st"> </span>Request<span class="op">$</span><span class="kw">new</span>(</a>
-<a class="sourceLine" id="cb12-2" data-line-number="2">  <span class="dt">path =</span> <span class="st">&quot;/factorial-rds&quot;</span>, </a>
-<a class="sourceLine" id="cb12-3" data-line-number="3">  <span class="dt">method =</span> <span class="st">&quot;GET&quot;</span>, </a>
-<a class="sourceLine" id="cb12-4" data-line-number="4">  <span class="dt">parameters_query =</span> <span class="kw">list</span>(<span class="dt">x =</span> <span class="dv">10</span>)</a>
-<a class="sourceLine" id="cb12-5" data-line-number="5">)</a>
-<a class="sourceLine" id="cb12-6" data-line-number="6">response =<span class="st"> </span>application<span class="op">$</span><span class="kw">process_request</span>(request)</a>
-<a class="sourceLine" id="cb12-7" data-line-number="7">response<span class="op">$</span>body</a>
-<a class="sourceLine" id="cb12-8" data-line-number="8"><span class="co">#&gt; [1] &quot;500 Internal Server Error: can't encode body with content_type = 'application/x-rds'&quot;</span></a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>request <span class="ot">=</span> Request<span class="sc">$</span><span class="fu">new</span>(</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">path =</span> <span class="st">&quot;/factorial-rds&quot;</span>, </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">&quot;GET&quot;</span>, </span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">parameters_query =</span> <span class="fu">list</span>(<span class="at">x =</span> <span class="dv">10</span>)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>response <span class="ot">=</span> application<span class="sc">$</span><span class="fu">process_request</span>(request)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>response<span class="sc">$</span>body</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;500 Internal Server Error: can&#39;t encode body with content_type = &#39;application/x-rds&#39;&quot;</span></span></code></pre></div>
 <p>In order to resolve problem above we would need to either register <code>application/x-rds</code> content handler with <code>ContentHandlers$set_encode()</code> or manually specify <code>encode</code> function (<code>identity</code> in our case):</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">application<span class="op">$</span><span class="kw">add_get</span>(<span class="dt">path =</span> <span class="st">&quot;/factorial-rds2&quot;</span>, <span class="cf">function</span>(req, res) {</a>
-<a class="sourceLine" id="cb13-2" data-line-number="2">  x =<span class="st"> </span><span class="kw">as.integer</span>(req<span class="op">$</span><span class="kw">get_param_query</span>(<span class="st">&quot;x&quot;</span>))</a>
-<a class="sourceLine" id="cb13-3" data-line-number="3">  result =<span class="st"> </span><span class="kw">factorial</span>(x)</a>
-<a class="sourceLine" id="cb13-4" data-line-number="4">  body_rds =<span class="st"> </span><span class="kw">serialize</span>(<span class="kw">list</span>(<span class="dt">result =</span> result), <span class="dt">connection =</span> <span class="ot">NULL</span>)</a>
-<a class="sourceLine" id="cb13-5" data-line-number="5">  res<span class="op">$</span><span class="kw">set_body</span>(body_rds)</a>
-<a class="sourceLine" id="cb13-6" data-line-number="6">  res<span class="op">$</span><span class="kw">set_content_type</span>(<span class="st">&quot;application/x-rds&quot;</span>)</a>
-<a class="sourceLine" id="cb13-7" data-line-number="7">  res<span class="op">$</span>encode =<span class="st"> </span>identity</a>
-<a class="sourceLine" id="cb13-8" data-line-number="8">})</a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>application<span class="sc">$</span><span class="fu">add_get</span>(<span class="at">path =</span> <span class="st">&quot;/factorial-rds2&quot;</span>, <span class="cf">function</span>(.req, .res) {</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">=</span> <span class="fu">as.integer</span>(.req<span class="sc">$</span><span class="fu">get_param_query</span>(<span class="st">&quot;x&quot;</span>))</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">=</span> <span class="fu">factorial</span>(x)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  body_rds <span class="ot">=</span> <span class="fu">serialize</span>(<span class="fu">list</span>(<span class="at">result =</span> result), <span class="at">connection =</span> <span class="cn">NULL</span>)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  .res<span class="sc">$</span><span class="fu">set_body</span>(body_rds)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  .res<span class="sc">$</span><span class="fu">set_content_type</span>(<span class="st">&quot;application/x-rds&quot;</span>)</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  .res<span class="sc">$</span>encode <span class="ot">=</span> identity</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div>
 <p>Now the answer is valid:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1">request =<span class="st"> </span>Request<span class="op">$</span><span class="kw">new</span>(</a>
-<a class="sourceLine" id="cb14-2" data-line-number="2">  <span class="dt">path =</span> <span class="st">&quot;/factorial-rds2&quot;</span>, </a>
-<a class="sourceLine" id="cb14-3" data-line-number="3">  <span class="dt">method =</span> <span class="st">&quot;GET&quot;</span>, </a>
-<a class="sourceLine" id="cb14-4" data-line-number="4">  <span class="dt">parameters_query =</span> <span class="kw">list</span>(<span class="dt">x =</span> <span class="dv">10</span>)</a>
-<a class="sourceLine" id="cb14-5" data-line-number="5">)</a>
-<a class="sourceLine" id="cb14-6" data-line-number="6">response =<span class="st"> </span>application<span class="op">$</span><span class="kw">process_request</span>(request)</a>
-<a class="sourceLine" id="cb14-7" data-line-number="7"><span class="kw">unserialize</span>(response<span class="op">$</span>body)</a>
-<a class="sourceLine" id="cb14-8" data-line-number="8"><span class="co">#&gt; $result</span></a>
-<a class="sourceLine" id="cb14-9" data-line-number="9"><span class="co">#&gt; [1] 3628800</span></a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>request <span class="ot">=</span> Request<span class="sc">$</span><span class="fu">new</span>(</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">path =</span> <span class="st">&quot;/factorial-rds2&quot;</span>, </span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">&quot;GET&quot;</span>, </span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">parameters_query =</span> <span class="fu">list</span>(<span class="at">x =</span> <span class="dv">10</span>)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>response <span class="ot">=</span> application<span class="sc">$</span><span class="fu">process_request</span>(request)</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="fu">unserialize</span>(response<span class="sc">$</span>body)</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $result</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 3628800</span></span></code></pre></div>
 </div>
 <div id="decoding" class="section level1">
 <h1>Decoding</h1>
 <p>RestRserve facilitates with parsing incoming request body as well. Consider a service which expects JSON POST requests:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">application =<span class="st"> </span>Application<span class="op">$</span><span class="kw">new</span>(<span class="dt">content_type =</span> <span class="st">&quot;application/json&quot;</span>)</a>
-<a class="sourceLine" id="cb15-2" data-line-number="2">application<span class="op">$</span><span class="kw">add_post</span>(<span class="st">&quot;/echo&quot;</span>, <span class="cf">function</span>(req, res) {</a>
-<a class="sourceLine" id="cb15-3" data-line-number="3">  res<span class="op">$</span><span class="kw">set_body</span>(req<span class="op">$</span>body)</a>
-<a class="sourceLine" id="cb15-4" data-line-number="4">})</a>
-<a class="sourceLine" id="cb15-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb15-6" data-line-number="6">request =<span class="st"> </span>Request<span class="op">$</span><span class="kw">new</span>(<span class="dt">path =</span> <span class="st">&quot;/echo&quot;</span>, <span class="dt">method =</span> <span class="st">&quot;POST&quot;</span>, <span class="dt">body =</span> <span class="st">'{&quot;hello&quot;:&quot;world&quot;}'</span>, <span class="dt">content_type =</span> <span class="st">&quot;application/json&quot;</span>)</a>
-<a class="sourceLine" id="cb15-7" data-line-number="7">response =<span class="st"> </span>application<span class="op">$</span><span class="kw">process_request</span>(request)</a>
-<a class="sourceLine" id="cb15-8" data-line-number="8">response<span class="op">$</span>body</a>
-<a class="sourceLine" id="cb15-9" data-line-number="9"><span class="co">#&gt; [1] &quot;{\&quot;hello\&quot;:\&quot;world\&quot;}&quot;</span></a></code></pre></div>
-<p>The logic behind decoding is also controlled by [EncodeDecodeMiddleware] and its <code>ContentHandlers</code> property.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>application <span class="ot">=</span> Application<span class="sc">$</span><span class="fu">new</span>(<span class="at">content_type =</span> <span class="st">&quot;application/json&quot;</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>application<span class="sc">$</span><span class="fu">add_post</span>(<span class="st">&quot;/echo&quot;</span>, <span class="cf">function</span>(.req, .res) {</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  .res<span class="sc">$</span><span class="fu">set_body</span>(.req<span class="sc">$</span>body)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>request <span class="ot">=</span> Request<span class="sc">$</span><span class="fu">new</span>(<span class="at">path =</span> <span class="st">&quot;/echo&quot;</span>, <span class="at">method =</span> <span class="st">&quot;POST&quot;</span>, <span class="at">body =</span> <span class="st">&#39;{&quot;hello&quot;:&quot;world&quot;}&#39;</span>, <span class="at">content_type =</span> <span class="st">&quot;application/json&quot;</span>)</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>response <span class="ot">=</span> application<span class="sc">$</span><span class="fu">process_request</span>(request)</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>response<span class="sc">$</span>body</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;{\&quot;hello\&quot;:\&quot;world\&quot;}&quot;</span></span></code></pre></div>
+<p>The logic behind decoding is also controlled by ?EncodeDecodeMiddleware and its <code>ContentHandlers</code> property.</p>
+</div>
+<div id="extending-encoding-and-decoding" class="section level1">
+<h1>Extending encoding and decoding</h1>
+<p>Here is an example which demonstrates on how to extend ?EncodeDecodeMiddleware to handle additional content types:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>encode_decode_middleware <span class="ot">=</span> EncodeDecodeMiddleware<span class="sc">$</span><span class="fu">new</span>()</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>encode_decode_middleware<span class="sc">$</span>ContentHandlers<span class="sc">$</span><span class="fu">set_encode</span>(</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;text/csv&quot;</span>, </span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">function</span>(x) {</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    con <span class="ot">=</span> <span class="fu">rawConnection</span>(<span class="fu">raw</span>(<span class="dv">0</span>), <span class="st">&quot;w&quot;</span>)</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">on.exit</span>(<span class="fu">close</span>(con))</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">write.csv</span>(x, con, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rawConnectionValue</span>(con)</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>encode_decode_middleware<span class="sc">$</span>ContentHandlers<span class="sc">$</span><span class="fu">set_decode</span>(</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;text/csv&quot;</span>, </span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>  <span class="cf">function</span>(x) {</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>    res <span class="ot">=</span> <span class="fu">try</span>({</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>      con <span class="ot">=</span> <span class="fu">textConnection</span>(<span class="fu">rawToChar</span>(x), <span class="at">open =</span> <span class="st">&quot;r&quot;</span>)</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>      <span class="fu">on.exit</span>(<span class="fu">close</span>(con))</span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>      <span class="fu">read.csv</span>(con)</span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>    }, <span class="at">silent =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">inherits</span>(res, <span class="st">&quot;try-error&quot;</span>)) {</span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>      <span class="fu">raise</span>(HTTPError<span class="sc">$</span><span class="fu">bad_request</span>(<span class="at">body =</span> <span class="fu">attributes</span>(res)<span class="sc">$</span>condition<span class="sc">$</span>message))</span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(res)</span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p>Extended middleware needs to be provided to the application constructor:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(iris)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>app <span class="ot">=</span> Application<span class="sc">$</span><span class="fu">new</span>(<span class="at">middleware =</span> <span class="fu">list</span>(encode_decode_middleware))</span></code></pre></div>
+<p>Now let’s test it:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>app<span class="sc">$</span><span class="fu">add_get</span>(<span class="st">&quot;/iris&quot;</span>, <span class="at">FUN =</span> <span class="cf">function</span>(.req, .res) {</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  .res<span class="sc">$</span><span class="fu">set_content_type</span>(<span class="st">&quot;text/csv&quot;</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  .res<span class="sc">$</span><span class="fu">set_body</span>(iris)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>req <span class="ot">=</span> Request<span class="sc">$</span><span class="fu">new</span>(<span class="at">path =</span> <span class="st">&quot;/iris&quot;</span>, <span class="at">method =</span> <span class="st">&quot;GET&quot;</span>)</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>res <span class="ot">=</span> app<span class="sc">$</span><span class="fu">process_request</span>(req)</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>iris_out <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="fu">textConnection</span>(<span class="fu">rawToChar</span>(res<span class="sc">$</span>body)))</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(iris_out)</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Sepal.Length Sepal.Width Petal.Length Petal.Width Species</span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1          5.1         3.5          1.4         0.2  setosa</span></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2          4.9         3.0          1.4         0.2  setosa</span></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3          4.7         3.2          1.3         0.2  setosa</span></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4          4.6         3.1          1.5         0.2  setosa</span></span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5          5.0         3.6          1.4         0.2  setosa</span></span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6          5.4         3.9          1.7         0.4  setosa</span></span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>app<span class="sc">$</span><span class="fu">add_post</span>(<span class="st">&quot;/in&quot;</span>, <span class="at">FUN =</span> <span class="cf">function</span>(.req, .res) {</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">str</span>(.req<span class="sc">$</span>body)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>req <span class="ot">=</span> Request<span class="sc">$</span><span class="fu">new</span>(<span class="at">path =</span> <span class="st">&quot;/in&quot;</span>, <span class="at">method =</span> <span class="st">&quot;POST&quot;</span>, <span class="at">body =</span> res<span class="sc">$</span>body, <span class="at">content_type =</span> <span class="st">&quot;text/csv&quot;</span>)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>app<span class="sc">$</span><span class="fu">process_request</span>(req)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &#39;data.frame&#39;:    150 obs. of  5 variables:</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  $ Sepal.Length: num  5.1 4.9 4.7 4.6 5 5.4 4.6 5 4.4 4.9 ...</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  $ Sepal.Width : num  3.5 3 3.2 3.1 3.6 3.9 3.4 3.4 2.9 3.1 ...</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  $ Petal.Length: num  1.4 1.4 1.3 1.5 1.4 1.7 1.4 1.5 1.4 1.5 ...</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  $ Petal.Width : num  0.2 0.2 0.2 0.2 0.2 0.4 0.3 0.2 0.2 0.1 ...</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  $ Species     : chr  &quot;setosa&quot; &quot;setosa&quot; &quot;setosa&quot; &quot;setosa&quot; ...</span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;RestRserve Response&gt;</span></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   status code: 200 OK</span></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   content-type: text/plain</span></span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;Headers&gt;</span></span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     Server: RestRserve/0.4.0</span></span></code></pre></div>
 </div>
 
+
+
+<!-- code folding -->
 
 
 <!-- dynamically load mathjax for compatibility with self-contained -->

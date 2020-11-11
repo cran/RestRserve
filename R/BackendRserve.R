@@ -19,9 +19,9 @@ BackendRserve = R6::R6Class(
     #' @param jit_level changes R's byte compiler level to this value before app
     #' start.
     #' @param precompile try to use R's byte compiler to pre-compile
-    initialize = function(..., jit_level = 0L, precompile = TRUE) {
-      private$jit_level = jit_level
-      private$precompile = precompile
+    initialize = function(..., jit_level = 0L, precompile = FALSE) {
+      private$jit_level = checkmate::assert_int(jit_level, lower = 0L, upper = 3L)
+      private$precompile = checkmate::assert_logical(precompile)
       invisible(self)
     },
     #' @description
@@ -34,6 +34,32 @@ BackendRserve = R6::R6Class(
     #' @param background Whether to try to launch in background process on UNIX.
     #' @return [ApplicationProcess] object when `background = TRUE`.
     start = function(app, http_port = 8080, ..., background = FALSE) { # nocov start
+
+      if (interactive()) {
+        # https://stackoverflow.com/a/35849779/1069256
+        # checking RSTUDIO env var does not work because it might be inherited by
+        # terminal launched from RStudio
+        if (identical(.Platform[['GUI']], "RStudio")) {
+          msg = "Starting RestRserve app which uses Rserve backend from within"
+          msg = paste(msg, "RStudio is not supported.\n")
+          msg = paste0(msg, "Please consider to start the application")
+          msg = paste(msg, "from a shell in non-interactive mode:\n\n")
+          msg = paste0(msg, "> Rscript your_app.R\n\n")
+          msg = paste0(msg, "Rserve uses forks for processing requests")
+          msg = paste(msg, "in parallel. This is known to cause problems when")
+          msg = paste(msg, "using within RStudio (see 'GUI/embedded environments'")
+          msg = paste(msg, "section of the ?parallel::mcfork documentation for details)")
+          stop(msg)
+        } else {
+          warn_msg = "Starting RestRserve app from interactive session"
+          warn_msg = paste(warn_msg, "might cause unstable work of the service.\n")
+          warn_msg = paste0(warn_msg, "Please consider to start the application")
+          warn_msg = paste(warn_msg, "from a shell in non-interactive mode:\n\n")
+          warn_msg = paste0(warn_msg, "> Rscript your_app.R")
+          warning(warn_msg)
+        }
+      }
+
       checkmate::assert_int(http_port)
       ARGS = list(...)
       if (http_port > 0L) {
@@ -56,6 +82,22 @@ BackendRserve = R6::R6Class(
 
       # temporary modify global environment
       .GlobalEnv[[".http.request"]] = function(url, parameters_query, body, headers) {
+
+        # FIXME - think of  redirecting stdout and stderr streams from child processes
+        # see https://github.com/rexyai/RestRserve/issues/158 for the hints
+        # con = nullfile()
+        # sink(con, type = "output")
+        # sink(con, type = "message")
+        #
+        # on.exit({
+        #   sink(NULL, type = "output")
+        #   sink(NULL, type = "message")
+        #   close(con)
+        # })
+        if (.Platform$OS.type == "unix") {
+          parallel:::closeFD(0)
+        }
+
         self$set_request(
           app$.__enclos_env__$private$request,
           path = url,
