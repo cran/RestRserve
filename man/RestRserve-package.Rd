@@ -8,12 +8,7 @@
 \description{
 \if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
 
-Allows to easily create high-performance full featured HTTP APIs from R
-  functions. Provides high-level classes such as 'Request', 'Response',
-  'Application', 'Middleware' in order to streamline server side
-  application development. Out of the box allows to serve requests using
-  'Rserve' package, but flexible enough to integrate with other HTTP servers
-  such as 'httpuv'.
+Allows to easily create high-performance full featured HTTP APIs from R functions. Provides high-level classes such as 'Request', 'Response', 'Application', 'Middleware' in order to streamline server side application development. Out of the box allows to serve requests using 'Rserve' package, but flexible enough to integrate with other HTTP servers such as 'httpuv'.
 }
 \details{
 \subsection{Introduction}{
@@ -58,11 +53,11 @@ we want to expose.\if{html}{\out{<div class="r">}}\preformatted{calc_fib = funct
   if (n == 0L) return(0L)
   if (n == 1L || n == 2L) return(1L)
   x = rep(1L, n)
-
+  
   for (i in 3L:n) \{
-   x[[i]] = x[[i - 1]] + x[[i - 2]]
+   x[[i]] = x[[i - 1]] + x[[i - 2]] 
   \}
-
+  
   return(x[[n]])
 \}
 }\if{html}{\out{</div>}}
@@ -173,7 +168,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Dmitriy Selivanov \email{ds@rexy.ai} (\href{https://orcid.org/0000-0001-5413-1506}{ORCID})
+\strong{Maintainer}: Dmitry Selivanov \email{ds@rexy.ai} (\href{https://orcid.org/0000-0001-5413-1506}{ORCID})
 
 Authors:
 \itemize{
@@ -182,6 +177,7 @@ Authors:
 
 Other contributors:
 \itemize{
+  \item David Zimmermann \email{david_j_zimmermann@hotmail.com} [contributor]
   \item rexy.ai [copyright holder, funder]
 }
 

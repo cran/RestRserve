@@ -228,10 +228,4 @@ do_test_external = function() {
   expect_equal(rawToChar(ans$content), "OK!")
 }
 
-# FIXME
-if (.Platform == "windows" && (Sys.getenv("GITHUB_ACTIONS") == "true")) {
-  # don't on windows github actions CI for as it fails
-  # for no reason with "connection refused"
-} else {
-  do_test_external()
-}
+do_test_external()
