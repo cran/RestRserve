@@ -1,5 +1,5 @@
-c76cab93335685c81ddc2c44e895d91b *DESCRIPTION
-06f8ad6e43824b0d8a40eff2bba1928e *NAMESPACE
+9857ef8881e09c278bd5af11e01a0c5e *DESCRIPTION
+47f23167c25ae5c9bc715b214b734cf6 *NAMESPACE
 347b2dadb10f9885199f25ade2871219 *NEWS.md
 f9177dd6ae0b326f3c16b1028add3767 *R/Application.R
 d46e2e300e2d5aeb29aaf1e6e8f08549 *R/AuthBackend.R
@@ -27,7 +27,7 @@ ea75fdc14847732e8522abf3ba09a795 *R/json.R
 b3940d532de70e535f21da1060b399b4 *R/openapi.R
 d6708b72356344a134df8d3d9d1e5b03 *R/swagger-ui.R
 aa5ecd78358be41e1f7fb2edd4158ec3 *R/utils.R
-6349071e6f22bdc22cdcce537d9f984b *R/zzz.R
+ec368fcd97ca6a044515f500c6459b29 *R/zzz.R
 83ccf71a960a7c2f8dcf64a08d7cf8a5 *README.md
 df8f142c383657bc9ac732a0d217f6fa *build/vignette.rds
 dc5f6b62b559c4e401698995c71ae73d *inst/bench.R
@@ -36,13 +36,13 @@ ab3846965c8b2583b4b8830a288ffd00 *inst/doc/Authentication.R
 6b881917b4c67b170891f79ebed828b6 *inst/doc/Authentication.html
 784b7a0384e38139ea41ce51508045f2 *inst/doc/ContentHandlers.R
 2049fad490ff8b1b41fcd0c8bd999f38 *inst/doc/ContentHandlers.Rmd
-efb6311e4a73ff75b0e4ebd7c6ed59d9 *inst/doc/ContentHandlers.html
+eb98eb133675e8a062298fd60a1189de *inst/doc/ContentHandlers.html
 f4b3183bc607e0333814695d32399cb4 *inst/doc/Logging.R
 5b96745a501d0fa1b8e4422b93e7097c *inst/doc/Logging.Rmd
-05ba9b35934a202bcbc4aac25715bcdd *inst/doc/Logging.html
+34129d99d0689874417e79efbd6b3d4b *inst/doc/Logging.html
 e51e453f761ab118234c58fff4951dbb *inst/doc/Middleware.R
 73b5469823778f652615df333fcbf0fd *inst/doc/Middleware.Rmd
-67d56f706fcb55517d038d12f51aaca4 *inst/doc/Middleware.html
+76e9df0a8e425684c1e0c1c088e1c16e *inst/doc/Middleware.html
 3d1214dd0f599086c7effb0ee07f18b4 *inst/doc/RestRserve.R
 1034d86dc506de553034a9a511e89a9d *inst/doc/RestRserve.Rmd
 da415eb2a8af14d816b7c715d5ea4d92 *inst/doc/RestRserve.html
@@ -99,7 +99,7 @@ ffc5471c72baec1d6371897f46d7616c *inst/tinytest/test-app-middleware.R
 984778fcbe4ad47b61d44ab84f3050cd *inst/tinytest/test-app-plot.R
 59daeab042e9c242c079356167978c40 *inst/tinytest/test-app-static.R
 9f051259a7da7c388c6a7143368768e9 *inst/tinytest/test-capture-stack.R
-5b1f75825723b86d2ce938cc2c1bbd13 *inst/tinytest/test-cl-application.R
+087f75475a7a022ff2f14483e28c7f2a *inst/tinytest/test-cl-application.R
 598ec3c031893403eb30755a0ecb96aa *inst/tinytest/test-cl-auth-backend.R
 92b646b097976fd78aa25d9c2197f7d4 *inst/tinytest/test-cl-auth-barear.R
 deb095ab82c64e4ec1e3caa5bd41c270 *inst/tinytest/test-cl-auth-basic.R
