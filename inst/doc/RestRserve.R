@@ -1,10 +1,10 @@
-## ---- include = FALSE---------------------------------------------------------
+## ----include = FALSE----------------------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
 
-## ---- include = FALSE---------------------------------------------------------
+## ----include = FALSE----------------------------------------------------------
 run_bg = function(expr) {
   args = c("--vanilla", "-q")
   expr_c = deparse(substitute(expr))
@@ -31,7 +31,7 @@ calc_fib = function(n) {
   return(x[[n]])
 }
 
-## ---- req_res-----------------------------------------------------------------
+## ----req_res------------------------------------------------------------------
 fib_handler = function(.req, .res) {
   n = as.integer(.req$parameters_query[["n"]])
   if (length(n) == 0L || is.na(n)) {
