@@ -1,4 +1,4 @@
-0f02706a81e691dc7274fe33712f95b2 *DESCRIPTION
+795637d7b58c315664abed59c3d1fea1 *DESCRIPTION
 47f23167c25ae5c9bc715b214b734cf6 *NAMESPACE
 7e7c0844141f867df224f0a12e90c823 *NEWS.md
 d3583fd75aa8daaee5d6ed03d7d092d9 *R/Application.R
@@ -36,13 +36,13 @@ dc5f6b62b559c4e401698995c71ae73d *inst/bench.R
 7351731c4e886315ec54789b3e00c204 *inst/doc/Authentication.html
 f7ad86d6e5a693e007217319106bfcee *inst/doc/ContentHandlers.R
 2049fad490ff8b1b41fcd0c8bd999f38 *inst/doc/ContentHandlers.Rmd
-954d29839530abb1caf6e47678e3d88d *inst/doc/ContentHandlers.html
+6fb2ff6a4ee34faf21768a9f6e7a5e31 *inst/doc/ContentHandlers.html
 4392d21cfe5a763a37ebd33ad0e6f358 *inst/doc/Logging.R
 5b96745a501d0fa1b8e4422b93e7097c *inst/doc/Logging.Rmd
-b1ff94ad7d8d023bcb63e6744ad91b62 *inst/doc/Logging.html
+2eb57517223c0e368ef1776566cf5905 *inst/doc/Logging.html
 a62275c8ad10260d810bc93dd893ae9b *inst/doc/Middleware.R
 73b5469823778f652615df333fcbf0fd *inst/doc/Middleware.Rmd
-7077a071a44e06098ac6bffb267285f6 *inst/doc/Middleware.html
+fa0660b73655f27dc1e93ff245abb14a *inst/doc/Middleware.html
 16400d0c410de09fbe89afafad8f5dfa *inst/doc/RestRserve.R
 6eb214cc62a7bd26c53699fb13531097 *inst/doc/RestRserve.Rmd
 164f7d00905dc4eba4015a30c09fcdde *inst/doc/RestRserve.html

@@ -364,7 +364,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="co">#&gt;   status code: 200 OK</span></span>
 <span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="co">#&gt;   content-type: text/plain</span></span>
 <span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="co">#&gt;   &lt;Headers&gt;</span></span>
-<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a><span class="co">#&gt;     Server: RestRserve/1.2.2; Rserve/1.8.13</span></span></code></pre></div>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a><span class="co">#&gt;     Server: RestRserve/1.2.3; Rserve/1.8.13</span></span></code></pre></div>
 <p>Let’s take a closer look to the <code>response</code> object and its
 <code>body</code> property:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">str</span>(response<span class="sc">$</span>body)</span>
@@ -416,7 +416,7 @@ content types - <code>text/plain</code> and
 <span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#&gt;   res = jsonlite::toJSON(x, dataframe = &#39;columns&#39;, auto_unbox = unbox, null = &#39;null&#39;, na = &#39;null&#39;)</span></span>
 <span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">#&gt;   unclass(res)</span></span>
 <span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co">#&gt; }</span></span>
-<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co">#&gt; &lt;bytecode: 0x7f992262ad68&gt;</span></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co">#&gt; &lt;bytecode: 0x7fc52bdc84d0&gt;</span></span>
 <span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="co">#&gt; &lt;environment: namespace:RestRserve&gt;</span></span></code></pre></div>
 <p>We can manually override application default content-type:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>application<span class="sc">$</span><span class="fu">add_get</span>(<span class="at">path =</span> <span class="st">&quot;/factorial-json&quot;</span>, <span class="cf">function</span>(.req, .res) {</span>
@@ -562,7 +562,7 @@ constructor:</p>
 <span id="cb19-13"><a href="#cb19-13" tabindex="-1"></a><span class="co">#&gt;   status code: 200 OK</span></span>
 <span id="cb19-14"><a href="#cb19-14" tabindex="-1"></a><span class="co">#&gt;   content-type: text/plain</span></span>
 <span id="cb19-15"><a href="#cb19-15" tabindex="-1"></a><span class="co">#&gt;   &lt;Headers&gt;</span></span>
-<span id="cb19-16"><a href="#cb19-16" tabindex="-1"></a><span class="co">#&gt;     Server: RestRserve/1.2.2; Rserve/1.8.13</span></span></code></pre></div>
+<span id="cb19-16"><a href="#cb19-16" tabindex="-1"></a><span class="co">#&gt;     Server: RestRserve/1.2.3; Rserve/1.8.13</span></span></code></pre></div>
 </div>
 
 
