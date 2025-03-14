@@ -49,7 +49,7 @@ overflow: visible;
 </style>
 <style type="text/css" data-origin="pandoc">
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -60,7 +60,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
 { counter-reset: source-line 0; }
@@ -351,7 +351,7 @@ in order to print useful messages during app execution.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(RestRserve)</span>
 <span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>application <span class="ot">=</span> Application<span class="sc">$</span><span class="fu">new</span>()</span>
 <span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>application<span class="sc">$</span>logger<span class="sc">$</span><span class="fu">info</span>(<span class="st">&quot;hello from logger&quot;</span>)</span>
-<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="co">#&gt; {&quot;timestamp&quot;:&quot;2024-05-21 10:39:15.107491&quot;,&quot;level&quot;:&quot;INFO&quot;,&quot;name&quot;:&quot;Application&quot;,&quot;pid&quot;:14703,&quot;msg&quot;:&quot;hello from logger&quot;}</span></span></code></pre></div>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="co">#&gt; {&quot;timestamp&quot;:&quot;2025-03-14 15:55:32.822997&quot;,&quot;level&quot;:&quot;INFO&quot;,&quot;name&quot;:&quot;Application&quot;,&quot;pid&quot;:58455,&quot;msg&quot;:&quot;hello from logger&quot;}</span></span></code></pre></div>
 <p><code>logger</code> is an instance of <code>Logger</code> class. We
 believe it is important to have logs in a machine readable format, so by
 default logger writes messages to <code>stdout</code> in JSON
@@ -380,7 +380,7 @@ root of a number:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co"># let&#39;s emulate query string &quot;/sqrt?x=10&quot;</span></span>
 <span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>request <span class="ot">=</span> Request<span class="sc">$</span><span class="fu">new</span>(<span class="at">path =</span> <span class="st">&quot;/sqrt&quot;</span>, <span class="at">method =</span> <span class="st">&quot;GET&quot;</span>, <span class="at">parameters_query =</span> <span class="fu">list</span>(<span class="at">x =</span> <span class="st">&quot;10&quot;</span>)) </span>
 <span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>response <span class="ot">=</span> application<span class="sc">$</span><span class="fu">process_request</span>(request)</span>
-<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#&gt; {&quot;timestamp&quot;:&quot;2024-05-21 10:39:15.162887&quot;,&quot;level&quot;:&quot;ERROR&quot;,&quot;name&quot;:&quot;Application&quot;,&quot;pid&quot;:14703,&quot;msg&quot;:&quot;&quot;,&quot;context&quot;:{&quot;request_id&quot;:&quot;505a7abc-171b-11ef-b3c7-faffc2676f47&quot;,&quot;message&quot;:{&quot;error&quot;:&quot;object &#39;x&#39; not found&quot;,&quot;call&quot;:&quot;FUN(request, response)&quot;,&quot;traceback&quot;:[&quot;FUN(request, response)&quot;,&quot;.res$set_body(sqrt(x))&quot;]</span><span class="re">}}}</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#&gt; {&quot;timestamp&quot;:&quot;2025-03-14 15:55:32.881855&quot;,&quot;level&quot;:&quot;ERROR&quot;,&quot;name&quot;:&quot;Application&quot;,&quot;pid&quot;:58455,&quot;msg&quot;:&quot;&quot;,&quot;context&quot;:{&quot;request_id&quot;:&quot;b4a448f4-00a9-11f0-9c5a-faffc2676f47&quot;,&quot;message&quot;:{&quot;error&quot;:&quot;object &#39;x&#39; not found&quot;,&quot;call&quot;:&quot;FUN(request, response)&quot;,&quot;traceback&quot;:[&quot;FUN(request, response)&quot;,&quot;.res$set_body(sqrt(x))&quot;]</span><span class="re">}}}</span></span>
 <span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>response<span class="sc">$</span>body</span>
 <span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="co">#&gt; [1] &quot;500 Internal Server Error&quot;</span></span></code></pre></div>
 <p>Surprise! (or not?)</p>
@@ -412,7 +412,7 @@ application.</p>
 <span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>})</span>
 <span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>request <span class="ot">=</span> Request<span class="sc">$</span><span class="fu">new</span>(<span class="at">path =</span> <span class="st">&quot;/sqrt2&quot;</span>, <span class="at">method =</span> <span class="st">&quot;GET&quot;</span>, <span class="at">parameters_query =</span> <span class="fu">list</span>(<span class="at">x =</span> <span class="st">&quot;10&quot;</span>)) </span>
 <span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>response <span class="ot">=</span> application<span class="sc">$</span><span class="fu">process_request</span>(request)</span>
-<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">#&gt; {&quot;timestamp&quot;:&quot;2024-05-21 10:39:15.197520&quot;,&quot;level&quot;:&quot;ERROR&quot;,&quot;name&quot;:&quot;Application&quot;,&quot;pid&quot;:14703,&quot;msg&quot;:&quot;&quot;,&quot;context&quot;:{&quot;request_id&quot;:&quot;505db8d0-171b-11ef-b3c7-faffc2676f47&quot;,&quot;message&quot;:{&quot;error&quot;:&quot;object &#39;x&#39; not found&quot;,&quot;call&quot;:&quot;FUN(request, response)&quot;,&quot;traceback&quot;:[&quot;FUN(request, response)&quot;,&quot;.res$set_body(fun1(x))&quot;,&quot;.res$set_body(fun1(x))&quot;,&quot;fun2(x)&quot;]</span><span class="re">}}}</span></span></code></pre></div>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">#&gt; {&quot;timestamp&quot;:&quot;2025-03-14 15:55:32.920485&quot;,&quot;level&quot;:&quot;ERROR&quot;,&quot;name&quot;:&quot;Application&quot;,&quot;pid&quot;:58455,&quot;msg&quot;:&quot;&quot;,&quot;context&quot;:{&quot;request_id&quot;:&quot;b4a79608-00a9-11f0-9c5a-faffc2676f47&quot;,&quot;message&quot;:{&quot;error&quot;:&quot;object &#39;x&#39; not found&quot;,&quot;call&quot;:&quot;FUN(request, response)&quot;,&quot;traceback&quot;:[&quot;FUN(request, response)&quot;,&quot;.res$set_body(fun1(x))&quot;,&quot;.res$set_body(fun1(x))&quot;,&quot;fun2(x)&quot;]</span><span class="re">}}}</span></span></code></pre></div>
 <p>Now we clearly see that error happens inside <code>fun2</code></p>
 
 
